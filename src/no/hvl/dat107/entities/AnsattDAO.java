@@ -1,7 +1,7 @@
 package no.hvl.dat107.entities;
 
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.Scanner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -12,23 +12,45 @@ import javax.persistence.TypedQuery;
 public class AnsattDAO {
 
 	private EntityManagerFactory emf;
-
-	
 	
 	public AnsattDAO() {
 		emf = Persistence.createEntityManagerFactory("AnsattPU");
+	}
+	
+	public void leggTilAnsatt(Ansatt ansatt) {
+		
+		EntityManager em = emf.createEntityManager();
+		EntityTransaction et = em.getTransaction();
+		
+		try {
+			et.begin();
+			em.persist(ansatt);
+	        et.commit();
+	        System.out.println("Den nye ansatte er nå lagt til databasen!!!");
+	    }
+		
+		catch (Throwable e) {
+	        e.printStackTrace();
+	        et.rollback();
+	    } 
+		finally {
+	        em.close();
+	    }
 	}
 	
 	public Ansatt finnAnsattMedId(int id) {
 	
 		EntityManager em = emf.createEntityManager();
 		
+		Ansatt ansatt = null;
+		
 		try {
-			return em.find(Ansatt.class, id);
+			ansatt = em.find(Ansatt.class, id);
 		}
 		finally {
 			em.close();
 		}
+		return ansatt;
 	}
 	
 	public Ansatt finnAnsattMedBruker(String bruker) {
@@ -40,7 +62,9 @@ public class AnsattDAO {
 		
 		try {
 			et.begin();
-			TypedQuery<Ansatt> query = em.createQuery("SELECT a FROM Ansatt a WHERE a.bruker = :bruker", Ansatt.class);
+			String strQuery = "SELECT a FROM Ansatt a" + "WHERE a.bruker = :bruker";
+			TypedQuery<Ansatt> query = em.createQuery(strQuery, Ansatt.class);
+			query.setParameter("bruker", bruker);
 			ansatt = query.getSingleResult();
 			et.commit();
 		}
@@ -77,34 +101,23 @@ public class AnsattDAO {
 		return ansatt;
 	}
 	
-	public void oppdaterAnsatt(Ansatt ansatt) {
+	public void oppdaterAnsattStilling(String stilling, int id) {
 		
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction et = em.getTransaction();
 		
-		Scanner scnr = new Scanner(System.in);
+		System.out.println("Du har valgt å endre stilling");
 		
 		try {
 			et.begin();
-			System.out.println("Vil du oppdatere stilling? ja/nei?");
-			if(scnr.nextLine() == "ja") {
-				System.out.println("Skriv inn ny stilling: ");
-				scnr.nextLine();
-				ansatt.setStilling(scnr.nextLine());
+			Ansatt a = em.find(Ansatt.class, id);
+			
+			if(a != null) {
+				a.setStilling(stilling);
+				em.merge(a);
 			}
-			else if(scnr.nextLine() == "nei") {
-				System.out.println("Stilling ikke oppdatert!!!");
-			}
-			System.out.println("Vil du oppdatere lønn? ja/nei?");
-			if(scnr.nextLine() == "ja") {
-				System.out.println("Skriv inn ny lønn: ");
-				scnr.nextInt();
-				ansatt.setMaanedslonn(scnr.nextInt());
-			}
-			else if(scnr.nextLine() == "nei") {
-				System.out.println("Lønn ikke oppdatert!!!");
-			}
-	        et.commit();
+	        
+			et.commit();
 	    }
 		catch (Throwable e) {
 			e.printStackTrace();
@@ -115,23 +128,31 @@ public class AnsattDAO {
 	    }
 	}
 	
-	public void leggTilAnsatt(Ansatt ansatt) {
+	public void oppdaterAnsattLonn(BigDecimal lonn, int id) {
 		
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction et = em.getTransaction();
 		
+		System.out.println("Du har valgt å endre stilling");
+		
 		try {
 			et.begin();
-			em.persist(ansatt);
-	        et.commit();
+			Ansatt a = em.find(Ansatt.class, id);
+			
+			if(a != null) {
+				a.setMaanedslonn(lonn);
+				em.merge(a);
+			}
+			et.commit();
 	    }
-		
 		catch (Throwable e) {
-	        e.printStackTrace();
+			e.printStackTrace();
 	        et.rollback();
 	    } 
 		finally {
 	        em.close();
 	    }
+
 	}
+	
 }

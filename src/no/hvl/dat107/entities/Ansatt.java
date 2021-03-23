@@ -1,5 +1,6 @@
 package no.hvl.dat107.entities;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
@@ -7,24 +8,28 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(schema = "oblig3")
+@Table(name = "ansatt", schema = "oblig3")
 public class Ansatt {
 
 	@Id private int ansattID;
-	private int brukernavn;
+	private String brukernavn;
 	private String fornavn;
 	private String etternavn;
-	private LocalDate ansattDato;
+	private LocalDate dato;
 	private String stilling;
-	private int maanedslonn;
+	private BigDecimal maanedslonn;
 	
-	public Ansatt(int ansattID, int brukernavn, String fornavn, String etternavn, LocalDate ansattDato, String stilling,
-			int maanedslonn) {
+	public Ansatt() {
+		
+	}
+	
+	public Ansatt(int ansattID, String brukernavn, String fornavn, String etternavn, LocalDate dato, String stilling,
+			BigDecimal maanedslonn) {
 		this.ansattID = ansattID;
 		this.brukernavn = brukernavn;
 		this.fornavn = fornavn;
 		this.etternavn = etternavn;
-		this.ansattDato = ansattDato;
+		this.dato = dato;
 		this.stilling = stilling;
 		this.maanedslonn = maanedslonn;
 	}
@@ -37,11 +42,11 @@ public class Ansatt {
 		this.ansattID = ansattID;
 	}
 
-	public int getBrukernavn() {
+	public String getBrukernavn() {
 		return brukernavn;
 	}
 
-	public void setBrukernavn(int brukernavn) {
+	public void setBrukernavn(String brukernavn) {
 		this.brukernavn = brukernavn;
 	}
 
@@ -62,11 +67,11 @@ public class Ansatt {
 	}
 
 	public LocalDate getAnsattDato() {
-		return ansattDato;
+		return dato;
 	}
 
-	public void setAnsattDato(LocalDate ansattDato) {
-		this.ansattDato = ansattDato;
+	public void setAnsattDato(LocalDate dato) {
+		this.dato = dato;
 	}
 
 	public String getStilling() {
@@ -77,23 +82,23 @@ public class Ansatt {
 		this.stilling = stilling;
 	}
 
-	public int getMaanedslonn() {
+	public BigDecimal getMaanedslonn() {
 		return maanedslonn;
 	}
 
-	public void setMaanedslonn(int maanedslonn) {
+	public void setMaanedslonn(BigDecimal maanedslonn) {
 		this.maanedslonn = maanedslonn;
 	}
 
 	@Override
 	public String toString() {
 		return "Ansatt [ ansattID: " + ansattID + " | brukernavn: " + brukernavn + " | fornavn: " + fornavn + "| etternavn: "
-				+ etternavn + " | ansattDato: " + ansattDato + " | stilling: " + stilling + " | maanedslonn: " + maanedslonn
+				+ etternavn + " | ansattDato: " + dato + " | stilling: " + stilling + " | maanedslonn: " + maanedslonn
 				+ " ]";
 	}
 	
 	public void skrivUt() {
-		System.out.println(this.toString());
+		System.out.println(this);
 	}
 	
 }

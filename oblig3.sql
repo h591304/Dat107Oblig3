@@ -17,7 +17,7 @@ CREATE TABLE Ansatt
 );
 
 INSERT INTO
-  Ansatt(ansattID, brukernavn, fornavn, etternavn, ansatt_dato, stilling, maanedslonn)
+  Ansatt(ansattID, brukernavn, fornavn, etternavn, dato, stilling, maanedslonn)
 VALUES
     (2, 'ape', 'Olga', 'Brekkeflat', '2023-06-14', 'Janitor', 1000),
     (4, 'pinne', 'Tor', 'Muhammed', '2023-06-15', 'Stripper', 99999),
